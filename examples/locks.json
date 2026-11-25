@@ -1,0 +1,7 @@
+{
+  "traces": [
+    ["database", "cache"],
+    ["cache", "database"],
+    ["metrics", "logger"]
+  ]
+}
