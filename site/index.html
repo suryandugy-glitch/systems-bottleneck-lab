@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a1020">
+  <meta name="description" content="Systems Bottleneck Lab — interactive experiments in database performance, distributed latency, and concurrency analysis.">
+  <title>Systems Bottleneck Lab — Research Console</title>
+  <link rel="stylesheet" href="/site/styles.css">
+</head>
+<body>
+  <header class="nav wrap">
+    <a class="brand" href="#home"><span class="brand-mark">S</span><span>SYSTEMS<span class="muted">/LAB</span></span></a>
+    <nav aria-label="Primary navigation"><a href="#experiments">Experiments</a><a href="#method">Methodology</a><a href="https://github.com/suryandugy-glitch/systems-bottleneck-lab" target="_blank" rel="noopener noreferrer">Source ↗</a></nav>
+  </header>
+  <main id="home">
+    <section class="hero wrap">
+      <div class="eyebrow"><span class="pulse"></span> OPEN SYSTEMS RESEARCH / VERSION 0.1</div>
+      <h1>Find the bottleneck<br><em>before it finds you.</em></h1>
+      <p>Three experimental instruments for understanding where databases slow down, distributed requests stall, and concurrent programs risk deadlock.</p>
+      <div class="hero-actions"><a class="button primary" href="#experiments">Launch experiments <span>↗</span></a><a class="button ghost" href="#method">Read the methodology</a></div>
+      <div class="metrics"><div><strong>03</strong><small>Research instruments</small></div><div><strong>00</strong><small>External dependencies</small></div><div><strong>100%</strong><small>Reproducible Python core</small></div></div>
+    </section>
+    <section id="experiments" class="wrap laboratory">
+      <div class="section-heading"><span>01 / THE LABORATORY</span><h2>Explore system failure modes.</h2><p>Each interactive panel illustrates a model. For measured database benchmarks, use the Python CLI.</p></div>
+      <div class="tabbar" role="tablist" aria-label="Choose experiment">
+        <button class="tab active" data-tab="plan" role="tab" aria-selected="true">01 / PlanCliff</button>
+        <button class="tab" data-tab="tail" role="tab" aria-selected="false">02 / TailForge</button>
+        <button class="tab" data-tab="lock" role="tab" aria-selected="false">03 / LockGraph</button>
+      </div>
+      <div class="panel active" id="plan" role="tabpanel">
+        <div class="panel-copy"><div class="tag">DATABASE SYSTEMS</div><h3>Query-plan cliffs</h3><p>Explore how workload scale can expose an abrupt execution-cost increase. This browser chart is an illustrative model, not a live SQLite benchmark.</p><label for="plan-index">Index strategy</label><select id="plan-index"><option value="index">Indexed lookup</option><option value="scan">Full table scan</option></select><label for="plan-skew">Hot-key fraction <output id="skew-value">80%</output></label><input id="plan-skew" type="range" min="10" max="99" value="80"><button class="button primary run" id="run-plan">Recalculate model ↗</button></div>
+        <div class="display"><div class="display-top"><span>ESTIMATED LATENCY / ms</span><span class="live">MODEL OUTPUT</span></div><svg id="plan-chart" viewBox="0 0 600 300" role="img" aria-label="Modeled query latency by number of rows"></svg><div id="plan-summary" class="result"></div></div>
+      </div>
+      <div class="panel" id="tail" role="tabpanel" hidden>
+        <div class="panel-copy"><div class="tag">DISTRIBUTED SYSTEMS</div><h3>The long-tail problem</h3><p>Fan-out waits for the slowest dependency. Compare a baseline with hedged requests using seeded, synthetic samples.</p><label for="fanout">Dependencies per request <output id="fanout-value">8</output></label><input id="fanout" type="range" min="1" max="24" value="8"><label for="hedge">Hedge threshold (ms) <output id="hedge-value">50</output></label><input id="hedge" type="range" min="10" max="150" value="50"><button class="button primary run" id="run-tail">Simulate 5,000 requests ↗</button></div>
+        <div class="display"><div class="display-top"><span>REQUEST LATENCY / ms</span><span class="live">SEEDED SIMULATION</span></div><div id="tail-bars" class="bars"></div><div id="tail-summary" class="result"></div></div>
+      </div>
+      <div class="panel" id="lock" role="tabpanel" hidden>
+        <div class="panel-copy"><div class="tag">CONCURRENCY ANALYSIS</div><h3>Lock-order inversion</h3><p>Enter one lock acquisition sequence per line. The analyzer adds directed edges and searches for a cycle.</p><label for="lock-input">Observed lock sequences</label><textarea id="lock-input" rows="6" spellcheck="false">database > cache
+cache > database
+metrics > logger</textarea><button class="button primary run" id="run-lock">Analyze dependencies ↗</button></div>
+        <div class="display"><div class="display-top"><span>LOCK DEPENDENCY ANALYSIS</span><span class="live">LOCAL ANALYSIS</span></div><div id="lock-results" class="lock-results" aria-live="polite"></div></div>
+      </div>
+    </section>
+    <section id="method" class="wrap method"><div><span class="eyebrow">02 / RESEARCH NOTES</span><h2>Models are useful.<br><em>Limits matter.</em></h2></div><div class="method-items"><article><span>01</span><div><h3>Repeatability</h3><p>Use fixed seeds, explicit parameters, and automated regression tests. CLI experiments can be rerun locally.</p></div></article><article><span>02</span><div><h3>Measurement versus simulation</h3><p>PlanCliff's Python CLI measures real SQLite queries. The browser visualizes a model. TailForge is a simulation; LockGraph is a structural analyzer.</p></div></article><article><span>03</span><div><h3>Honest conclusions</h3><p>A regression flag or cycle is a starting point for investigation, not proof of a production failure.</p></div></article></div></section>
+  </main>
+  <footer class="wrap"><span>SYSTEMS / BOTTLENECK LAB</span><span>Built by Suryandu Ganguly · Open source research prototypes</span></footer>
+  <script src="/site/app.js" defer></script>
+</body>
+</html>
